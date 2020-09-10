@@ -52,38 +52,8 @@ app.get('/', (req, res) => {
 
 app.get('/insert', (req, res) => res.send('Hello World!!!!!'))
 
-app.post('/insertto', (req, res) => {
-  // if (!req.body.email) {
-  //   return res.status(422).json({ errors: "email of item must be provided"});
-  // }
-  // if (!req.body.name) {
-  //   return res.status(422).json({ errors: "name of item must be provided"});
-  // }
-  // if (!req.body.phone) {
-  //   return res.status(422).json({ errors: "phone of item must be provided"});
-  // }
-  // if (!req.body.description) {
-  //   return res.status(422).json({ errors: "A description of conact must be provided"});
-  // }
-  const id = req.body.id;
-  const email = req.body.email;
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const message = req.body.message ;
-  const companyname = req.body.companyname;
-  const abutus = req.body.abutus;
-  const primePay = req.body.primePay;
-  const digitalassetsolutions = req.body.digitalassetsolutions;
-  const custodialservices = req.body.custodialservices;
-  const assetprotectontrusts = req.body.assetprotectontrusts;
-  const escrowservices = req.body.escrowservices;
-  const complianceservices = req.body.complianceservices;
-  const other = req.body.other;
-  
-
+app.post('/insertto', (req, res) => {  
   cloudant
-    // .create(email, name, message, phone,id,companyname,abutus,primePay,digitalassetsolutions,
-    //   custodialservices,custodialservices,assetprotectontrusts,escrowservices,complianceservices,other)
     .create(req.body)
     .then(data => {
       if (data.statusCode != 201) {
@@ -112,29 +82,8 @@ app.get('/api/session', (req, res) => {
     .catch(err => handleError(res, err));
 });
 
-/**
- * Post process the response from Watson Assistant
- *
- * We want to see if this was a request for resources/supplies, and if so
- * look up in the Cloudant DB whether any of the requested resources are
- * available. If so, we insert a list of the resouces found into the response
- * that will sent back to the client.
- * 
- * We also modify the text response to match the above.
- */
 function post_process_assistant(result) {
   let resource
-  // First we look to see if a) Watson did identify an intent (as opposed to not
-  // understanding it at all), and if it did, then b) see if it matched a supplies entity
-  // with reasonable confidence. "supplies" is the term our trained Watson skill uses
-  // to identify the target of a question about resources, i.e.:
-  //
-  // "Where can i find face-masks?"
-  //
-  // ....should return with an enitity == "supplies" and entitty.value = "face-masks"
-  //
-  // That's our trigger to do a lookup - using the entitty.value as the name of resource
-  // to to a datbase lookup.
   if (result.intents.length > 0 ) {
     result.entities.forEach(item => {
       if ((item.entity == "supplies") &&  (item.confidence > 0.3)) {
