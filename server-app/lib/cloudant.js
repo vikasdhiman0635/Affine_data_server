@@ -155,24 +155,6 @@ function create(req) {
     return new Promise((resolve, reject) => {
         let itemId = uuidv4();
         let whenCreated = Date.now();
-        // let item = {
-        //     _id: itemId,
-            // id: itemId,
-            // email: email,
-            // name: name,
-            // message: message,
-            // phone: phone,
-            // companyname: companyname,
-            // primePay: primePay,
-            // abutus: abutus,
-            // digitalassetsolutions: digitalassetsolutions,
-            // custodialservices: custodialservices,
-            // assetprotectontrusts: assetprotectontrusts,
-            // escrowservices: escrowservices,
-            // complianceservices: complianceservices,
-            // other: other,
-        //     whenCreated: whenCreated
-        // };
         db.insert(req, (err, result) => {
             if (err) {
                 console.log('Error occurred: ' + err.message, 'create()');
